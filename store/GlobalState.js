@@ -8,11 +8,11 @@ export const DataContext = createContext()
 
 export const DataProvider = ({children}) => {
     const initialState = { 
-        notify: {}, auth: {}, cart: [], modal: [], orders: [], users: [], categories: []
+        notify: {}, auth: {}, cart: [], modal: [], orders: [], users: [], categories: [], wallet: 0
     }
 
     const [state, dispatch] = useReducer(reducers, initialState)
-    const { cart, auth } = state
+    const { cart, auth, wallet } = state
 
     useEffect(() => {
         const firstLogin = localStorage.getItem("firstLogin");
@@ -26,31 +26,34 @@ export const DataProvider = ({children}) => {
                         user: res.user
                     }
                 })
+    
+                // Fetch wallet data after authentication
+                if(res.access_token){
+                    getData('wallet', res.access_token)
+                    .then(res => {
+                        if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
+                        
+                        dispatch({type: 'UPDATE_WALLET', payload: res.balance})
+                    })
+                }
             })
         }
-
+    
+        // Fetch categories data
         getData('categories').then(res => {
             if(res.err) return dispatch({type: 'NOTIFY', payload: {error: res.err}})
-
+    
             dispatch({ 
                 type: "ADD_CATEGORIES",
                 payload: res.categories
             })
         })
-        
-    },[])
-
-    useEffect(() => {
+    
+        // Fetch cart data from local storage
         const __next__cart01__devat = JSON.parse(localStorage.getItem('__next__cart01__devat'))
-
         if(__next__cart01__devat) dispatch({ type: 'ADD_CART', payload: __next__cart01__devat })
-    }, [])
-
-    useEffect(() => {
-        localStorage.setItem('__next__cart01__devat', JSON.stringify(cart))
-    }, [cart])
-
-    useEffect(() => {
+    
+        // Fetch orders and users data if authenticated
         if(auth.token){
             getData('order', auth.token)
             .then(res => {
@@ -58,7 +61,7 @@ export const DataProvider = ({children}) => {
                 
                 dispatch({type: 'ADD_ORDERS', payload: res.orders})
             })
-
+    
             if(auth.user.role === 'admin'){
                 getData('user', auth.token)
                 .then(res => {
@@ -71,7 +74,8 @@ export const DataProvider = ({children}) => {
             dispatch({type: 'ADD_ORDERS', payload: []})
             dispatch({type: 'ADD_USERS', payload: []})
         }
-    },[auth.token])
+    }, [auth.token]) // Add auth.token as dependency
+    
 
     return(
         <DataContext.Provider value={{state, dispatch}}>

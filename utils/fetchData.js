@@ -69,3 +69,32 @@ export const deleteData = async (url, token) => {
     const data = await res.json()
     return data
 }
+export const walletTopUp = async (amount, token) => {
+    try {
+        const res = await postData('wallet/top-up', { amount }, token);
+        return res;
+    } catch (error) {
+        console.error('Error topping up wallet:', error);
+        return { error: 'Error topping up wallet' };
+    }
+};
+
+export const walletWithdraw = async (amount, token) => {
+    try {
+        const res = await postData('wallet/withdraw', { amount }, token);
+        return res;
+    } catch (error) {
+        console.error('Error withdrawing from wallet:', error);
+        return { error: 'Error withdrawing from wallet' };
+    }
+};
+
+export const walletTransaction = async (total, token) => {
+    try {
+        const res = await postData('wallet/transaction', { total }, token);
+        return res;
+    } catch (error) {
+        console.error('Error processing wallet transaction:', error);
+        return { error: 'Error processing wallet transaction' };
+    }
+};

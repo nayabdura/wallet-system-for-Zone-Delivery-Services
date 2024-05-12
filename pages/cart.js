@@ -9,7 +9,7 @@ import { useRouter } from 'next/router'
 
 const Cart = () => {
   const { state, dispatch } = useContext(DataContext)
-  const { cart, auth, orders } = state
+  const { cart, auth, orders, wallet } = state
 
   const [total, setTotal] = useState(0)
 
@@ -58,19 +58,8 @@ const Cart = () => {
     if(!address || !mobile)
     return dispatch({ type: 'NOTIFY', payload: {error: 'Please add your address and mobile.'}})
 
-    let newCart = [];
-    for(const item of cart){
-      const res = await getData(`product/${item._id}`)
-      if(res.product.inStock - item.quantity >= 0){
-        newCart.push(item)
-      }
-    }
-    
-    if(newCart.length < cart.length){
-      setCallback(!callback)
-      return dispatch({ type: 'NOTIFY', payload: {
-        error: 'The product is out of stock or the quantity is insufficient.'
-      }})
+    if (total > wallet) {
+      return dispatch({ type: 'NOTIFY', payload: {error: 'Insufficient balance in wallet'} });
     }
 
     dispatch({ type: 'NOTIFY', payload: {loading: true} })
@@ -86,6 +75,7 @@ const Cart = () => {
         user: auth.user
       }
       dispatch({ type: 'ADD_ORDERS', payload: [...orders, newOrder] })
+      dispatch({ type: 'UPDATE_WALLET', payload: wallet - total });
       dispatch({ type: 'NOTIFY', payload: {success: res.msg} })
       return router.push(`/order/${res.newOrder._id}`)
     })
