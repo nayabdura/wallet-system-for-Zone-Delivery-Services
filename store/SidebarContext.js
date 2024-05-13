@@ -1,21 +1,21 @@
-import { createContext, useState } from "react";
+// import { createContext, useState } from "react";
 
-const initialValue = { isCollapsed: false };
+// const initialValue = { isCollapsed: false };
 
-const SidebarContext = createContext(initialValue);
+// const SidebarContext = createContext(initialValue);
 
-const SidebarProvider = ({ children }) => {
-  const [isCollapsed, setCollapse] = useState(false);
+// const SidebarProvider = ({ children }) => {
+//   const [isCollapsed, setCollapse] = useState(false);
 
-  const toggleSidebarcollapse = () => {
-    setCollapse((prevState) => !prevState);
-  };
+//   const toggleSidebarcollapse = () => {
+//     setCollapse((prevState) => !prevState);
+//   };
 
-  return (
-    <SidebarContext.Provider value={{ isCollapsed, toggleSidebarcollapse }}>
-      {children}
-    </SidebarContext.Provider>
-  );
-};
+//   return (
+//     <SidebarContext.Provider value={{ isCollapsed, toggleSidebarcollapse }}>
+//       {children}
+//     </SidebarContext.Provider>
+//   );
+// };
 
-export { SidebarContext, SidebarProvider };
+// export { SidebarContext, SidebarProvider };

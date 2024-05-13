@@ -3,7 +3,9 @@ import reducers from './Reducers'
 import { getData } from '../utils/fetchData'
 
 
+
 export const DataContext = createContext()
+
 
 
 export const DataProvider = ({children}) => {
@@ -14,6 +16,7 @@ export const DataProvider = ({children}) => {
     const [state, dispatch] = useReducer(reducers, initialState)
     const { cart, auth, wallet } = state
 
+  
     useEffect(() => {
         const firstLogin = localStorage.getItem("firstLogin");
         if(firstLogin){
@@ -74,7 +77,7 @@ export const DataProvider = ({children}) => {
             dispatch({type: 'ADD_ORDERS', payload: []})
             dispatch({type: 'ADD_USERS', payload: []})
         }
-    }, [auth.token]) // Add auth.token as dependency
+    }, [auth.token]) 
     
 
     return(

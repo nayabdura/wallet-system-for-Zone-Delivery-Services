@@ -7,6 +7,8 @@ module.exports = {
         "NEXT_PUBLIC_STRIPE_PUBLIC_KEY": "pk_test_51PFJC007H1lBcaG78OwbtSYsjCfrtCH2waXLFTdD0fkwrHIXUgs1bSLVynalMnGAYLO8HHzpuhkjRvcMZEQjLdPY00VeFlmNyP",
         "CLOUD_UPDATE_PRESET": "nextjs_store",
         "CLOUD_NAME": "demhj2lsx",
-        "CLOUD_API": "https://api.cloudinary.com/v1_1/demhj2lsx/image/upload"
+        "CLOUD_API": "https://api.cloudinary.com/v1_1/demhj2lsx/image/upload",
+        "YOUR_PUSHER_KEY": "1034d08ffce138d2c1d8",
+        "YOUR_CLUSTER": "ap2"
     }
 }

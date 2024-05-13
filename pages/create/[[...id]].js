@@ -4,12 +4,15 @@ import {DataContext} from '../../store/GlobalState'
 import {imageUpload} from '../../utils/imageUpload'
 import {postData, getData, putData} from '../../utils/fetchData'
 import {useRouter} from 'next/router'
-import io from 'socket.io-client';
+import axios from 'axios';
+import pusher from '../../utils/pusherConfig';
 
 
-const socket = io();
+
+
 
 const ProductsManager = () => {
+    
     const initialState = {
         title: '',
         price: 0,
@@ -26,7 +29,7 @@ const ProductsManager = () => {
     const {state, dispatch} = useContext(DataContext)
     const {categories, auth} = state
 
-    const router = useRouter()
+    const router = useRouter('/profile')
     const {id} = router.query
     const [onEdit, setOnEdit] = useState(false)
 
@@ -42,15 +45,23 @@ const ProductsManager = () => {
             setProduct(initialState)
             setImages([])
         }
-        socket.on('productUpdated', (data) => {
-            // Show popup modal or handle the update event
-            console.log('Product updated:', data);
-        });
-        return () => {
-            socket.off('productUpdated');
-        };
     },[id])
-
+    useEffect(() => {
+        loadData(); 
+    }, [id]);
+    const loadData = async () => {
+        if (id) {
+            setOnEdit(true);
+            getData(`product/${id}`).then(res => {
+                setProduct(res.product);
+                setImages(res.product.images);
+            });
+        } else {
+            setOnEdit(false);
+            setProduct(initialState);
+            setImages([]);
+        }
+    };
     const handleChangeInput = e => {
         const {name, value} = e.target
         setProduct({...product, [name]:value})
@@ -95,7 +106,15 @@ const ProductsManager = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
-        socket.emit('updateProduct', product);
+        pusher.trigger('product-events', 'product-added', {
+            adminId: auth.user._id,
+            message: 'A new product has been added.',
+          });
+      
+          await axios.post('/api/products/index', {
+           
+            adminId: auth.user._id,
+          });
         if(auth.user.role !== 'admin') 
         return dispatch({type: 'NOTIFY', payload: {error: 'Authentication is not valid.'}})
 

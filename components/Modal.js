@@ -9,7 +9,7 @@ const Modal = () => {
     const {state, dispatch} = useContext(DataContext)
     const { modal, auth } = state
 
-    const router = useRouter()
+    const router = useRouter('/')
 
     const deleteUser = (item) => {
         dispatch(deleteItem(item.data, item.id, item.type))

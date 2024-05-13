@@ -2,14 +2,29 @@ import Link from 'next/link'
 import { useContext, useEffect , useState } from 'react'
 import { DataContext } from '../../store/GlobalState'
 import { addToCart } from '../../store/Actions'
-
+import pusher from '../../utils/pusherConfig';
 
 const ProductItem = ({product, handleCheck}) => {
     const { state, dispatch } = useContext(DataContext)
     const { cart, auth } = state
    
 
+    const [alertMessage, setAlertMessage] = useState('');
 
+    useEffect(() => {
+      const channel = pusher.subscribe('products');
+      channel.bind('products', data => {
+        if (data.adminId !== auth.user._id) {
+          setAlertMessage(data.message);
+          alert(data.message);
+        }
+      });
+  
+      return () => {
+        channel.unbind_all();
+        channel.unsubscribe();
+      };
+    }, []);
 
     const userLink = () => {
         return(
