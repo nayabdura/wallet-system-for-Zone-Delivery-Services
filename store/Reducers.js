@@ -2,7 +2,7 @@ import { ACTIONS } from './Actions'
 
 
 const reducers = (state, action) => {
-    switch(action.type){
+    switch (action.type) {
         case ACTIONS.NOTIFY:
             return {
                 ...state,
@@ -32,6 +32,26 @@ const reducers = (state, action) => {
             return {
                 ...state,
                 users: action.payload
+            };
+        case ACTIONS.ADD_WALLETS:
+            return {
+                ...state,
+                wallets: action.payload
+            };
+        case ACTIONS.TOP_UP_WALLET:
+            return {
+                ...state,
+                wallet: state.wallet + action.payload
+            };
+        case ACTIONS.WITHDRAW_WALLET:
+            return {
+                ...state,
+                wallet: state.wallet - action.payload
+            };
+        case ACTIONS.MAKE_TRANSACTION:
+            return {
+                ...state,
+                wallet: state.wallet - action.payload
             };
         case ACTIONS.ADD_CATEGORIES:
             return {

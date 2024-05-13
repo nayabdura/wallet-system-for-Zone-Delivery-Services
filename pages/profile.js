@@ -56,10 +56,10 @@ const Profile = () => {
         if(!file)
             return dispatch({type: 'NOTIFY', payload: {error: 'File does not exist.'}})
 
-        if(file.size > 1024 * 1024) //1mb
+        if(file.size > 1024 * 1024) 
             return dispatch({type: 'NOTIFY', payload: {error: 'The largest image size is 1mb.'}})
 
-        if(file.type !== "image/jpeg" && file.type !== "image/png") //1mb
+        if(file.type !== "image/jpeg" && file.type !== "image/png") 
             return dispatch({type: 'NOTIFY', payload: {error: 'Image format is incorrect.'}})
         
         setData({...data, avatar: file})

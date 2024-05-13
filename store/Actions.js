@@ -6,6 +6,10 @@ export const ACTIONS = {
     ADD_ORDERS: 'ADD_ORDERS',
     ADD_USERS: 'ADD_USERS',
     ADD_CATEGORIES: 'ADD_CATEGORIES',
+    ADD_WALLETS: 'ADD_WALLETS',
+    TOP_UP_WALLET: 'TOP_UP_WALLETS',
+    WITHDRAW_WALLET: 'WITHDRAW_WALLETS',
+    MAKE_TRANSACTION: 'MAKE_TRANSACTIONS'
 }
 
 export const addToCart = (product, cart) => {
@@ -48,4 +52,19 @@ export const deleteItem = (data, id, type) => {
 export const updateItem = (data, id, post, type) => {
     const newData = data.map(item => (item._id === id ? post : item))
     return ({ type, payload: newData})
+    
 }
+export const topUpWallet = (amount) => ({
+    type: ACTIONS.TOP_UP_WALLET,
+    payload: amount
+});
+
+export const withdrawWallet = (amount) => ({
+    type: ACTIONS.WITHDRAW_WALLET,
+    payload: amount
+});
+
+export const makeTransaction = (totalAmount) => ({
+    type: ACTIONS.MAKE_TRANSACTION,
+    payload: totalAmount
+});

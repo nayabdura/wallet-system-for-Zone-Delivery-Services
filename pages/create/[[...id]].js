@@ -4,6 +4,10 @@ import {DataContext} from '../../store/GlobalState'
 import {imageUpload} from '../../utils/imageUpload'
 import {postData, getData, putData} from '../../utils/fetchData'
 import {useRouter} from 'next/router'
+import io from 'socket.io-client';
+
+
+const socket = io();
 
 const ProductsManager = () => {
     const initialState = {
@@ -38,6 +42,13 @@ const ProductsManager = () => {
             setProduct(initialState)
             setImages([])
         }
+        socket.on('productUpdated', (data) => {
+            // Show popup modal or handle the update event
+            console.log('Product updated:', data);
+        });
+        return () => {
+            socket.off('productUpdated');
+        };
     },[id])
 
     const handleChangeInput = e => {
@@ -84,6 +95,7 @@ const ProductsManager = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault()
+        socket.emit('updateProduct', product);
         if(auth.user.role !== 'admin') 
         return dispatch({type: 'NOTIFY', payload: {error: 'Authentication is not valid.'}})
 

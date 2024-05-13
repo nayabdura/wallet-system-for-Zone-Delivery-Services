@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { DataContext } from '../store/GlobalState';
@@ -9,7 +9,6 @@ import { BsPeople } from "react-icons/bs";
 import { TiContacts } from "react-icons/ti";
 import { FiMail } from "react-icons/fi";
 import { MdKeyboardArrowLeft, MdKeyboardArrowRight } from "react-icons/md";
-import { SidebarContext } from "../store/SidebarContext";
 import Logo from '../public/logo.jpg'
 
 
@@ -18,8 +17,12 @@ import Logo from '../public/logo.jpg'
 const Sidebar = () => {
     const router = useRouter();
     const { state, dispatch } = useContext(DataContext);
-     const { isCollapsed, toggleSidebarcollapse } = useContext(SidebarContext);
     const { auth } = state;
+    const [isCollapsed, setIsCollapsed] = useState(false);
+
+    const toggleSidebarcollapse = () => {
+        setIsCollapsed(!isCollapsed);
+    };
 
     const handleLogout = () => {
         Cookie.remove('refreshtoken', { path: 'api/auth/accessToken' });
@@ -32,7 +35,7 @@ const Sidebar = () => {
     const loggedRouter = () => {
         return (
 
-            <div className="sidebar__wrapper">
+            <div id="sidebar__wrapper">
             <button className="button" onClick={toggleSidebarcollapse}>
                 {isCollapsed ? <MdKeyboardArrowRight /> : <MdKeyboardArrowLeft />}
             </button>

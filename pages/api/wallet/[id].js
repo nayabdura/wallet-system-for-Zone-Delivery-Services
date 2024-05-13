@@ -1,5 +1,5 @@
 import connectDB from '../../../utils/connectDB'
-import Categories from '../../../models/walletModel'
+import Wallat from '../../../models/walletModel'
 import auth from '../../../middleware/auth'
 
 connectDB();

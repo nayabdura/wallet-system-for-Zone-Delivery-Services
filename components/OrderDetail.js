@@ -1,4 +1,3 @@
-// pages/OrderDetail.js
 import Link from 'next/link';
 import StripeBtn from '../components/stripeBtn';
 import { patchData } from '../utils/fetchData';
